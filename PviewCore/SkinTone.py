@@ -23,7 +23,7 @@ def skinToneDetect(data_dir, imgName):
     # refer = np.full(imgSize, 128, dtype="uint8")
     new_lab = cv2.merge((avr_l, img_a, img_b))
     new_img = cv2.cvtColor(new_lab, cv2.COLOR_Lab2BGR)
-# --------------------------<RGB평균값으로 이미지 재생성>-----------------------------
+    # --------------------------<RGB평균값으로 이미지 재생성>-----------------------------
     B_c, G_c, R_c = cv2.split(new_img)
     B_c = np.array(B_c)
     G_c = np.array(G_c)
