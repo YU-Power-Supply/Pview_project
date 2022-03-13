@@ -1,7 +1,6 @@
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import img_to_array, load_img # 이미지픽셀을 불러올 모듈
 
-
 def deadSkin(data_dir, imgName):
 
     grid = 128
