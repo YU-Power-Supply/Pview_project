@@ -54,6 +54,6 @@ def poreDetect(data_dir, imgName):
             if binaryImg[i][j] == 0:
                 zero_count += 1
 
-    imgRatio = 1 - (zero_count/(256*256))
+    imgRatio = zero_count/(256*256)
     print(f"모공 : {round(imgRatio*100,2)}")
     return round(imgRatio*100, 5)
