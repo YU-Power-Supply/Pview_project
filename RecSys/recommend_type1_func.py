@@ -1,10 +1,6 @@
 
 class User:
-    def __init__(self, name, age, sex):
-        self.name = name
-        self.age = age
-        self.sex = sex
-
+    def __init__(self):
         self.oil_score = 0
         self.moisture_score = 0
         self.wrinkle_score = 0
@@ -24,14 +20,8 @@ class User:
         self.pigmentation_score = score_data[4]
         self.pore_score = score_data[5]
 
-        print('update complited')
-
 #앰플라인과 스킨라인 구별
 class AmpleLine:
-    def __init__(self, typeList):
-        self.typeList = typeList
-        self.type_criteria = [1/len(self.typeList) * (i+1) for i in range(len(self.typeList))]
-
     def typeClassification(self, score_data):
         return -1
 
@@ -51,7 +41,8 @@ class LineA(AmpleLine): #진정(여드름)
         self.typeThree = 3.3
         self.typeFour = 4.4
         self.typeList = [self.typeOne, self.typeTwo, self.typeThree, self.typeFour]
-        super().__init__(self.typeList)
+        
+        self.type_criteria = [0.25, 0.5, 0.75, 1.0] #분류 기준
 
     #@Overriding
     def typeClassification(self, score_data):
@@ -75,7 +66,8 @@ class LineB(AmpleLine): #진정(자극완화)
         self.typeTwo = 2.2
         self.typeThree = 3.3
         self.typeList = [self.typeOne, self.typeTwo, self.typeThree]
-        super().__init__(self.typeList)
+        
+        self.type_criteria = [0.3, 0.7, 1.0]
 
     #@Overriding
     def typeClassification(self, score_data):
@@ -97,7 +89,8 @@ class LineC(AmpleLine): #미백
         self.typeTwo = 2.2
         self.typeThree = 3.3
         self.typeList = [self.typeOne, self.typeTwo, self.typeThree]
-        super().__init__(self.typeList)
+        
+        self.type_criteria = [0.2, 0.5, 1.0]
 
     #@Overriding
     def typeClassification(self, score_data):
@@ -118,7 +111,8 @@ class LineD(AmpleLine): #주름
         self.typeOne = 1.1
         self.typeTwo = 2.2
         self.typeList = [self.typeOne, self.typeTwo]
-        super().__init__(self.typeList)
+        
+        self.type_criteria = [0.5, 1.0]
 
     #@Overriding
     def typeClassification(self, score_data):
@@ -139,7 +133,8 @@ class LineE(AmpleLine): #수분
         self.typeOne = 1.1
         self.typeTwo = 2.2
         self.typeList = [self.typeOne, self.typeTwo]
-        super().__init__(self.typeList)
+        
+        self.type_criteria = [0.5, 1.0]
 
     #@Overriding
     def typeClassification(self, score_data):
@@ -155,33 +150,26 @@ class LineE(AmpleLine): #수분
         
         return type_result
 
-class LineFG(SkinLine): #F:보습 G:유분
+class LineF(SkinLine): #F:보습 G:유분
     def __init__(self):
         #F라인 타입별 성분용량
-        self.typeOne_F = 1.1
-        self.typeTwo_F = 2.2
-        self.typeThree_F = 3.3
-        self.typeFour_F = 4.4
-        self.typeFive_F = 5.5
-        #G라인 타입별 성분용량
-        self.typeOne_G = 1.01
-        self.typeTwo_G = 2.02
-        self.typeThree_G = 3.03
-        self.typeFour_G = 4.04
-        self.typeFive_G = 5.05
+        self.typeOne = 1.1
+        self.typeTwo = 2.2
+        self.typeThree = 3.3
+        self.typeFour = 4.4
+        self.typeFive = 5.5
 
-        self.typeList_F = [self.typeOne_F, self.typeTwo_F, self.typeThree_F, self.typeFour_F, self.typeFive_F]
-        self.typeList_G = [self.typeOne_G, self.typeTwo_G, self.typeThree_G, self.typeFour_G, self.typeFive_G]
+        self.typeList = [self.typeOne, self.typeTwo, self.typeThree, self.typeFour, self.typeFive]
         
-        self.type_criteria = [1/len(self.typeList_F) * (i+1) for i in range(len(self.typeList_F))]
+        self.type_criteria = [0.2, 0.4, 0.6, 0.8, 1.0]
 
     #@Overriding
-    def typeClassification_F(self, score_data):
+    def typeClassification(self, score_data):
         #유분 + 수분
         oil_score = score_data[0]
         deadskin_score = score_data[1]
 
-        type_score = oil_score*0.5 + deadskin_score*0.5 #피부톤 점수 100%
+        type_score = oil_score*0.5 + deadskin_score*0.5 #유분 점수 50% + 각질 점수 50%
         print(type_score, self.type_criteria)
         for criteria in self.type_criteria:
             if type_score <= criteria:
@@ -190,8 +178,22 @@ class LineFG(SkinLine): #F:보습 G:유분
         
         return type_result
 
-    #@Overriding
-    def typeClassification_G(self, score_data):
+
+class LineG(SkinLine):
+    def __init__(self):
+        #G라인 타입별 성분용량
+        self.typeOne = 1.01
+        self.typeTwo = 2.02
+        self.typeThree = 3.03
+        self.typeFour = 4.04
+        self.typeFive = 5.05
+
+        self.typeList = [self.typeOne, self.typeTwo, self.typeThree, self.typeFour, self.typeFive]
+
+        self.type_criteria = [0.2, 0.4, 0.6, 0.8, 1.0]
+
+        #@Overriding
+    def typeClassification(self, score_data):
         #유분
         oil_score = score_data[0]
 
